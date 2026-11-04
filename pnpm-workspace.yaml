@@ -1,0 +1,18 @@
+packages:
+  - "apps/*"
+  - "packages/*"
+  - "lib/typescript/*"
+  - "lib/typescript/utils/*"
+  - "lib/typescript/ui/*"
+allowBuilds:
+  esbuild: true
+  lefthook: true
+  sharp: true
+catalog:
+  "@hey-api/openapi-ts": ^0.97.2
+  "@types/node": ^25.9.9
+  "@types/react": ^19.2.15
+  "@types/react-dom": ^19.2.3
+  "@vercel/config": ^0.5.0
+  babel-plugin-react-compiler: ^1.0.0
+  typescript: ^6.0.3

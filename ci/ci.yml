@@ -1,0 +1,40 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+env:
+  NEXT_TELEMETRY_DISABLED: 1
+  NPM_CONFIG_FUND: false
+
+jobs:
+  format:
+    name: (oxfmt) Format Check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: jdx/mise-action@v2
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+      - name: Check formatting with Oxfmt
+        run: pnpm run format --check
+
+  build:
+    name: Website Build, Lint, and Test Full Repo
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: jdx/mise-action@v2
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+      - name: Build
+        working-directory: apps/website
+        run: pnpm run build
+      - name: Lint
+        run: pnpm run lint
+      - name: Test (JS)
+        run: pnpm run test
+      - name: Test (simulation engine)
+        run: python -m unittest discover -s apps/engine/tests -v

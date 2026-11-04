@@ -1,0 +1,32 @@
+[env]
+NEXT_TELEMETRY_DISABLED = "1"
+NPM_CONFIG_FUND = "false"
+ECONSIM_ENGINE_URL = "http://127.0.0.1:8000"
+
+[tools]
+node = "26.13.0"
+pnpm = "10.33.0"
+python = "3.13"
+
+[settings.npm]
+package_manager = "pnpm"
+
+[tasks.install]
+description = "Install JS dependencies"
+run = "pnpm install"
+
+[tasks.engine]
+description = "Run the Python simulation engine (SQLite) on :8000"
+run = "python3 apps/engine/server.py --port 8000"
+
+[tasks.web]
+description = "Run the Next.js website on :3000 (Hono /api proxies to the engine)"
+run = "pnpm --filter website dev"
+
+[tasks.dev]
+description = "Run engine and website together"
+depends = ["engine", "web"]
+
+[tasks.test]
+description = "Run engine tests (Python) and JS tests (vitest)"
+run = ["python3 -m unittest discover -s apps/engine/tests -v", "pnpm test"]

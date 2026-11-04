@@ -1,0 +1,33 @@
+{
+  "name": "@api/internal",
+  "version": "1.0.0",
+  "private": true,
+  "description": "",
+  "keywords": [],
+  "license": "ISC",
+  "author": "",
+  "bin": "src/index.ts",
+  "type": "module",
+  "exports": [
+    {
+      "import": "./src/index.ts",
+      "require": "./src/index.ts"
+    }
+  ],
+  "scripts": {
+    "dev": "tsx src/server.ts",
+    "generate-specs": "tsx src/index.ts --openapi > openapi.json"
+  },
+  "dependencies": {
+    "@hono/node-server": "^2.0.3",
+    "@scalar/hono-api-reference": "^0.10.16",
+    "hono": "^4.12.21",
+    "hono-typebox-openapi": "^0.0.5",
+    "typebox": "^1.1.38"
+  },
+  "devDependencies": {
+    "@hey-api/openapi-ts": "catalog:",
+    "@types/node": "catalog:",
+    "@vercel/config": "catalog:"
+  }
+}

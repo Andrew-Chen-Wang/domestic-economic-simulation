@@ -1,0 +1,13 @@
+[mcp_servers.context7]
+type = "url"
+url = "https://mcp.context7.com/mcp"
+
+[mcp_servers.postgres-main]
+type = "stdio"
+command = "pnpm"
+args = [
+  "dlx",
+  "-y",
+  "@modelcontextprotocol/server-postgres",
+  "postgresql://postgres:postgres@localhost:25271/main?schema=public",
+]

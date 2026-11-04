@@ -1,0 +1,28 @@
+{
+  "compilerOptions": {
+    "lib": ["esnext"],
+    "target": "ESNext",
+    "allowJs": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "noImplicitReturns": true,
+    "esModuleInterop": true,
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "jsx": "preserve",
+    "incremental": true,
+    "allowImportingTsExtensions": false,
+    "paths": {
+      "@api/internal/*": ["./src/*"]
+    },
+    "rootDir": "./src",
+    "outDir": "./build",
+    "composite": true,
+    "declaration": true,
+    "types": ["node"]
+  },
+  "include": ["**/*.ts", "**/*.json"],
+  "exclude": ["node_modules", "build"]
+}

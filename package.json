@@ -1,0 +1,33 @@
+{
+  "name": "domestic-economic-simulation",
+  "version": "1.0.0",
+  "private": true,
+  "license": "ISC",
+  "author": "",
+  "scripts": {
+    "format": "pnpm exec oxfmt --config .config/oxfmt.config.mts",
+    "lint": "pnpm exec oxlint --config .config/oxlint.config.mts --disable-nested-config --fix .",
+    "test": "vitest --run --config .config/vitest.config.mts",
+    "dev": "mise run dev"
+  },
+  "devDependencies": {
+    "@hey-api/openapi-ts": "catalog:",
+    "@types/react": "catalog:",
+    "@types/react-dom": "catalog:",
+    "jiti": "^2.7.0",
+    "lefthook": "^2.1.8",
+    "oxfmt": "0.51.0",
+    "oxlint": "^1.66.0",
+    "oxlint-tsgolint": "0.23.0",
+    "tsx": "^4.22.3",
+    "typescript": "catalog:",
+    "vitest": "^4.1.6"
+  },
+  "optionalDependencies": {
+    "@rollup/rollup-linux-x64-gnu": "^4.60.4"
+  },
+  "engines": {
+    "node": ">=26"
+  },
+  "packageManager": "pnpm@10.33.0"
+}
