@@ -9,7 +9,7 @@ const spec: OpenApiSpecsOptions = {
     info: {
       title: "Economy Simulation API",
       version: "1.0.0",
-      description: "Proxy to the Python simulation engine",
+      description: "Simulation engine API (in-process TypeScript engine, SQLite store)",
     },
     servers: [{ url: "http://localhost:3001", description: "Local Server" }],
     components: {

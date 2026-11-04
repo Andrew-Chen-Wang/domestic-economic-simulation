@@ -147,7 +147,9 @@ function PolicyEditor({ base, rewind }: { base: Policy; rewind: boolean }) {
   const [busy, setBusy] = useState(false)
   const patch = diffPatch(baseD, draft)
   const nChanges = Object.keys(patch).length
-  const set = (k: string, v: unknown) =>{  setDraft((x) => ({ ...x, [k]: v })); }
+  const set = (k: string, v: unknown) => {
+    setDraft((x) => ({ ...x, [k]: v }))
+  }
 
   const applyPreset = (pr: Preset) => {
     const next = { ...draft }
@@ -195,7 +197,13 @@ function PolicyEditor({ base, rewind }: { base: Policy; rewind: boolean }) {
             <b>Rewind mode:</b> deciding at <b>{ax.tickLabel(d.rewindTick)}</b> (month{" "}
             {d.rewindTick}). Applying creates a new branch from that moment; the original timeline
             is kept so you can compare outcomes.{" "}
-            <button type="button" className="small" onClick={() =>{  d.setRewindTick(null); }}>
+            <button
+              type="button"
+              className="small"
+              onClick={() => {
+                d.setRewindTick(null)
+              }}
+            >
               Decide at the latest month instead
             </button>
           </>
@@ -210,7 +218,14 @@ function PolicyEditor({ base, rewind }: { base: Policy; rewind: boolean }) {
       <Card title="Quick experiments">
         <div className="presets">
           {PRESETS.map((p) => (
-            <button type="button" key={p.label} className="small" onClick={() =>{  applyPreset(p); }}>
+            <button
+              type="button"
+              key={p.label}
+              className="small"
+              onClick={() => {
+                applyPreset(p)
+              }}
+            >
               {p.label}
             </button>
           ))}
@@ -231,7 +246,9 @@ function PolicyEditor({ base, rewind }: { base: Policy; rewind: boolean }) {
                   it={it}
                   value={draft[it.key]}
                   changed={!same(draft[it.key], baseD[it.key])}
-                  onChange={(v) =>{  set(it.key, v); }}
+                  onChange={(v) => {
+                    set(it.key, v)
+                  }}
                 />
               ))}
             </div>
@@ -243,7 +260,9 @@ function PolicyEditor({ base, rewind }: { base: Policy; rewind: boolean }) {
               aria-label="Decision note"
               style={{ flex: 1, minWidth: 200 }}
               value={note}
-              onChange={(e) =>{  setNote(e.target.value); }}
+              onChange={(e) => {
+                setNote(e.target.value)
+              }}
             />
             <span className="muted">{nChanges} change(s)</span>
             <button
@@ -328,13 +347,16 @@ function PolicyItem({
       <>
         <NumRange
           id={id}
+          label={it.label}
           min={(it.min ?? 0) * scale}
           max={(it.max ?? 1) * scale}
           step={step}
           value={v * scale}
-          onCommit={(x) =>{  onChange(x / scale); }}
+          onCommit={(x) => {
+            onChange(x / scale)
+          }}
         />
-        <span>
+        <span style={{ whiteSpace: "nowrap" }}>
           <input
             type="number"
             aria-label={it.label}
@@ -342,7 +364,9 @@ function PolicyItem({
             defaultValue={Number((v * scale).toFixed(3))}
             key={v}
             style={{ width: 84 }}
-            onBlur={(e) =>{  onChange(Number(e.target.value) / scale); }}
+            onBlur={(e) => {
+              onChange(Number(e.target.value) / scale)
+            }}
           />
           {it.type === "pct" ? "%" : ""}
         </span>
@@ -351,7 +375,13 @@ function PolicyItem({
   } else if (it.type === "choice") {
     control = (
       <>
-        <select id={id} value={String(value)} onChange={(e) =>{  onChange(e.target.value); }}>
+        <select
+          id={id}
+          value={String(value)}
+          onChange={(e) => {
+            onChange(e.target.value)
+          }}
+        >
           {(it.choices ?? []).map((c) => (
             <option key={c}>{c}</option>
           ))}
@@ -409,12 +439,12 @@ function PolicyItem({
                   step={pct ? 1 : (it.step ?? 0.1)}
                   defaultValue={pct ? Number((val * 100).toFixed(2)) : val}
                   key={val}
-                  onBlur={(e) =>{ 
+                  onBlur={(e) => {
                     onChange({
                       ...v,
                       [k]: pct ? Number(e.target.value) / 100 : Number(e.target.value),
-                    }); }
-                  }
+                    })
+                  }}
                 />
                 {removable ? (
                   <button
@@ -439,7 +469,9 @@ function PolicyItem({
             <AddSelect
               label={it.label}
               options={opts.filter((o) => !(o[0] in v))}
-              onAdd={(k) =>{  onChange({ ...v, [k]: pct ? 0.1 : 1 }); }}
+              onAdd={(k) => {
+                onChange({ ...v, [k]: pct ? 0.1 : 1 })
+              }}
             />
           )}
         </div>
@@ -459,7 +491,9 @@ function PolicyItem({
               <button
                 type="button"
                 className="small rm"
-                onClick={() =>{  onChange(v.filter((x) => x !== k)); }}
+                onClick={() => {
+                  onChange(v.filter((x) => x !== k))
+                }}
               >
                 ×
               </button>
@@ -468,7 +502,9 @@ function PolicyItem({
           <AddSelect
             label={it.label}
             options={opts.filter((o) => !v.includes(o[0]))}
-            onAdd={(k) =>{  onChange([...v, k]); }}
+            onAdd={(k) => {
+              onChange([...v, k])
+            }}
           />
         </div>
       </>
@@ -486,6 +522,7 @@ function PolicyItem({
 /** Range slider that shows its value while dragging and commits on release. */
 function NumRange(props: {
   id: string
+  label: string
   min: number
   max: number
   step: number
@@ -495,13 +532,16 @@ function NumRange(props: {
   const [v, setV] = useState<number | null>(null)
   return (
     <input
+      aria-label={props.label}
       id={props.id}
       type="range"
       min={props.min}
       max={props.max}
       step={props.step}
       value={v ?? props.value}
-      onChange={(e) =>{  setV(Number(e.target.value)); }}
+      onChange={(e) => {
+        setV(Number(e.target.value))
+      }}
       onPointerUp={() => {
         if (v !== null) props.onCommit(v)
         setV(null)
@@ -534,8 +574,8 @@ function AddSelect({
         }}
       >
         <option value="">+ add…</option>
-        {options.map(([k, n]) => (
-          <option key={k} value={k}>
+        {options.map(([k, n], i) => (
+          <option key={`${i}:${k}`} value={k}>
             {n}
           </option>
         ))}

@@ -1,38 +1,41 @@
 ## Build Commands
 
-All tools (Node 26, pnpm, Python 3.13) come from mise: `.config/mise.toml`.
+All tools (Node 26, pnpm) come from mise: `.config/mise.toml`.
 
 ```bash
 mise install && pnpm install     # setup
-mise run dev                     # engine (:8000) + website (:3000)
-mise run engine                  # Python engine only
-mise run web                     # Next.js only (needs the engine for /api)
-mise run test                    # Python unittest + vitest
+mise run dev                     # website + in-process engine on :3000
+mise run test                    # vitest (engine + API)
 
 pnpm run format                  # Oxfmt with .config/oxfmt.config.mts
 pnpm run lint                    # Oxlint (type-aware) with auto-fix
-python -m unittest discover -s apps/engine/tests -v
 ```
 
 ## Architecture
 
-pnpm monorepo:
+pnpm monorepo, all TypeScript:
 
-- `apps/engine` - the simulation. Pure-stdlib Python + SQLite. `econsim/catalog` (goods, processes,
-  knowledge, occupations, deposits), `world.py` (state + scenario generation), `physical.py`,
-  `sim.py` (monthly economic step), `demography.py`, `knowledge_engine.py`, `store.py` (timelines,
-  snapshots, ledger), `engine.py` (run / fork / replay), `server.py` (JSON API).
-- `apps/internal-api` - Hono app mounted at `/api` by the website; proxies to the engine
-  (`ECONSIM_ENGINE_URL`, default `http://127.0.0.1:8000`).
-- `apps/website` - Next.js 16. `src/app/page.tsx` renders the shell; `src/lib/dashboard/*.js` renders
-  the views imperatively (untyped JS, excluded from type-aware lint until ported to typed components).
+- `packages/engine` (`@econsim/engine`) - the simulation. `src/catalog` (goods, processes,
+  knowledge, occupations, deposits), `world.ts` (state + scenario generation), `physical.ts`,
+  `sim.ts` (monthly economic step), `demography.ts`, `knowledge-engine.ts`, `rng.ts` (serializable
+  PRNG), `store.ts` (node:sqlite: timelines, snapshots, ledger), `engine.ts` (run / fork / replay),
+  `api.ts` (framework-agnostic handlers whose return types the dashboard imports).
+- `apps/internal-api` - Hono router mounted at `/api` by the website; calls the engine in-process
+  (`getEngine()` is a process-wide singleton).
+- `apps/website` - Next.js 16. `src/components/dashboard` holds the typed React dashboard: `state.tsx`
+  (context: timelines, cursor, jobs), `charts.tsx` (SVG charts + tooltip), `views/*`.
 - `lib/typescript/utils/*` - shared TS utilities.
 
-There is no database server: the engine owns a SQLite file at `apps/engine/data/econsim.db`.
+There is no database server: the engine owns a SQLite file at `<repo>/data/econsim.db`
+(`ECONSIM_DB` overrides).
 
 ## Engine conventions
 
-- The simulation must stay deterministic: only use `w.rng`, never iterate over sets whose order
-  matters, and keep all state on `World` so a pickled snapshot is complete.
-- Add goods/processes in `econsim/catalog/goods.py`; run the engine tests to catch dangling references
-  and costs that don't cover prices.
+- The simulation must stay deterministic: only draw randomness from `w.rng` (via `rng.ts`), and
+  keep all state on `World` as plain data (Maps, Sets, arrays, records) so `structuredClone` /
+  `v8.serialize` produce a complete snapshot. No class instances or functions in `World`.
+- Iteration order matters for determinism: Maps and string-keyed records iterate in insertion order.
+- The engine was ported from Python; `a || b` intentionally treats 0 as missing (Python `or`), so
+  `prefer-nullish-coalescing` is off for `packages/engine`.
+- Add goods/processes in `packages/engine/src/catalog/goods-data.ts`; run the tests to catch
+  dangling references and costs that don't cover prices.

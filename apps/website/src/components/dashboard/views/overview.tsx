@@ -15,7 +15,7 @@ function annualSum(series: SeriesRow[], keys: Key[]) {
     for (const k of keys)
       r[k] = series
         .slice(i - 11, i + 1)
-        .reduce((a, m) => a + (typeof m[k] === "number" ? (m[k] as number) : 0), 0)
+        .reduce((a, m) => a + (typeof m[k] === "number" ? m[k] : 0), 0)
     out.push(r)
   }
   return out

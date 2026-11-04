@@ -41,10 +41,8 @@ next-env.d.ts
 
 lefthook-local.yml
 
-# python engine
-__pycache__/
-*.pyc
-apps/engine/data/
+# simulation database (SQLite, created at runtime)
+/data/
 *.db
 *.db-wal
 *.db-shm

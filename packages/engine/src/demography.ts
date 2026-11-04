@@ -122,7 +122,7 @@ function schoolYear(sim: Sim) {
   w.stats.enroll_ratio = ratio
   w.stats.uni_ratio = uratio
   const med = w.stats.median_wage ?? 1000
-  for (const p of [...w.persons.values()]) {
+  for (const p of Array.from(w.persons.values())) {
     const ay = p.age / 12
     if (p.school === null && ay >= 6 && ay < 7 && p.school_years === 0) p.school = "school"
     const r = p.region
@@ -336,7 +336,7 @@ function immigration(sim: Sim, ctx: Ctx) {
   let out = 0
   const wl = w.stats.wage_level_vs_world ?? 1
   if (wl < 0.6) {
-    for (const p of [...w.persons.values()]) {
+    for (const p of Array.from(w.persons.values())) {
       if (p.edu >= 4 && p.age > 22 * 12 && p.age < 45 * 12 && p.school === null) {
         if (random(rng) < ((0.0015 * (0.6 - wl)) / 0.6) * (2 - personFte(p))) {
           sim.quitAllJobs(p)

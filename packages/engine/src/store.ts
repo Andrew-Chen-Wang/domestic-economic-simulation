@@ -366,7 +366,9 @@ export class Store {
   }
 
   writeEvents(tid: number, events: SimEvent[]) {
-    this.tx(() =>{  this.insertEvents(tid, events); })
+    this.tx(() => {
+      this.insertEvents(tid, events)
+    })
   }
 
   writeDetail(tid: number, tick: number, kind: string, data: unknown) {

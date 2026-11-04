@@ -15,7 +15,7 @@ const int = (c: Context, k: string): number | null => {
   if (!Number.isFinite(n)) throw new ApiError(`${k} must be a number`)
   return Math.trunc(n)
 }
-const str = (c: Context, k: string): string | null => c.req.query(k) || null
+const str = (c: Context, k: string): string | null => c.req.query(k) ?? null
 const list = (c: Context, k: string): string[] | null => {
   const v = (c.req.query(k) ?? "").split(",").filter(Boolean)
   return v.length ? v : null

@@ -65,7 +65,7 @@ export function MoneyView() {
   )
   const m = d.current
   const y = (k: keyof SeriesRow) =>
-    win.reduce((a, x) => a + (typeof x[k] === "number" ? (x[k] as number) : 0), 0)
+    win.reduce((a, x) => a + (typeof x[k] === "number" ? x[k] : 0), 0)
   const prices = state.data?.data?.prices ?? {}
   const ladder = (
     [
@@ -114,7 +114,12 @@ export function MoneyView() {
         <div className="toolbar">
           <label>
             Hide flows smaller than{" "}
-            <select value={minFlow} onChange={(e) =>{  setMinFlow(Number(e.target.value)); }}>
+            <select
+              value={minFlow}
+              onChange={(e) => {
+                setMinFlow(Number(e.target.value))
+              }}
+            >
               <option value={0.002}>0.2% of total</option>
               <option value={0.005}>0.5%</option>
               <option value={0.01}>1%</option>
@@ -123,9 +128,12 @@ export function MoneyView() {
           </label>
           <label>
             <input
+              aria-label="Hide loans and repayments"
               type="checkbox"
               checked={hideFin}
-              onChange={(e) =>{  setHideFin(e.target.checked); }}
+              onChange={(e) => {
+                setHideFin(e.target.checked)
+              }}
             />{" "}
             hide loans/repayments
           </label>
@@ -153,17 +161,20 @@ export function MoneyView() {
           <label>
             Amount ${" "}
             <input
+              aria-label="Amount in dollars"
               type="number"
               value={amount}
               style={{ width: 180 }}
-              onChange={(e) =>{  setAmount(Number(e.target.value) || 0); }}
+              onChange={(e) => {
+                setAmount(Number(e.target.value) || 0)
+              }}
             />
           </label>
           <span>
-            = <b>{fmtMoney(amount / (m?.population || 1))}</b> per resident ·{" "}
-            <b>{fmtPct(amount / ((m?.gdp || 1) * 12), 2)}</b> of a year&apos;s GDP ·{" "}
-            <b>{fmtNum(amount / (m?.median_wage || 1))}</b> months of the median wage ·{" "}
-            <b>{fmtNum(amount / (m?.housing_rent || 1))}</b> months of average rent
+            = <b>{fmtMoney(amount / (m?.population ?? 1))}</b> per resident ·{" "}
+            <b>{fmtPct(amount / ((m?.gdp ?? 1) * 12), 2)}</b> of a year&apos;s GDP ·{" "}
+            <b>{fmtNum(amount / (m?.median_wage ?? 1))}</b> months of the median wage ·{" "}
+            <b>{fmtNum(amount / (m?.housing_rent ?? 1))}</b> months of average rent
           </span>
         </div>
         <h3>The scale of this economy (log scale)</h3>

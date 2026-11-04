@@ -33,9 +33,6 @@ export default defineConfig({
     "**/.config/**",
     "apps/website/postcss.config.js",
     "apps/website/next.config.ts",
-    // Imperative dashboard (untyped JS ported from the first prototype). Remove once it is
-    // rewritten as typed React components.
-    "apps/website/src/lib/dashboard/**",
   ],
   rules: {
     "consistent-return": "off",
@@ -101,6 +98,14 @@ export default defineConfig({
   },
   overrides: [
     {
+      // The engine was ported from Python: `a || b` deliberately treats 0 as missing (Python `or`).
+      files: ["**/packages/engine/**/*.ts"],
+      rules: {
+        "typescript/prefer-nullish-coalescing": "off",
+        "typescript/non-nullable-type-assertion-style": "off",
+      },
+    },
+    {
       files: ["**/*.ts", "**/*.tsx", "**/*.mts", "**/*.cts"],
       rules: {
         "no-var": "error",
@@ -113,6 +118,11 @@ export default defineConfig({
       files: ["**/apps/website/**/*.tsx"],
       rules: {
         "react/react-in-jsx-scope": "off",
+        // The React Compiler (next.config.ts) memoizes props and context values automatically.
+        "react-perf/jsx-no-new-function-as-prop": "off",
+        "react-perf/jsx-no-new-array-as-prop": "off",
+        "react-perf/jsx-no-new-object-as-prop": "off",
+        "react/jsx-no-constructed-context-values": "off",
       },
     },
   ],

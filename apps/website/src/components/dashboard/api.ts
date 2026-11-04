@@ -74,7 +74,9 @@ export function useApi<T>(path: string | null) {
       live = false
     }
   }, [path, nonce])
-  const reload = useCallback(() =>{  setNonce((n) => n + 1); }, [])
+  const reload = useCallback(() => {
+    setNonce((n) => n + 1)
+  }, [])
   const fresh = state.path === path
   return {
     data: fresh ? state.data : null,

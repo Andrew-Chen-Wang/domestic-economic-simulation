@@ -130,7 +130,7 @@ export function TimelinesView() {
               <th>Branched from</th>
               <th className="num">Months</th>
               <th>Decisions</th>
-              <th />
+              <th>Actions</th>
             </tr>
           </thead>
           <tbody>

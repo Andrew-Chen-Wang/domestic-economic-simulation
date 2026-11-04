@@ -54,8 +54,12 @@ export function TipProvider({ children }: { children: ReactNode }) {
 export function useTip() {
   const set = useContext(TipCtx)
   return {
-    show: (content: ReactNode, ev: MouseEvent) =>{  set({ content, x: ev.clientX, y: ev.clientY }); },
-    hide: () =>{  set(null); },
+    show: (content: ReactNode, ev: MouseEvent) => {
+      set({ content, x: ev.clientX, y: ev.clientY })
+    },
+    hide: () => {
+      set(null)
+    },
   }
 }
 
@@ -87,9 +91,13 @@ export function useWidth(ref: RefObject<HTMLElement | null>, fallback = 600): nu
     const el = ref.current
     if (!el) return
     setW(el.clientWidth || fallback)
-    const ro = new ResizeObserver(() =>{  setW(el.clientWidth || fallback); })
+    const ro = new ResizeObserver(() => {
+      setW(el.clientWidth || fallback)
+    })
     ro.observe(el)
-    return () =>{  ro.disconnect(); }
+    return () => {
+      ro.disconnect()
+    }
   }, [ref, fallback])
   return w
 }
@@ -311,15 +319,15 @@ export function LineChart(props: LineChartProps) {
                 width={10}
                 height={h - M.t - M.b}
                 fill="transparent"
-                onMouseMove={(ev) =>{ 
+                onMouseMove={(ev) => {
                   tip.show(
                     <>
                       <TipHead>{xfmt(mk.x)}</TipHead>
                       {mk.label}
                     </>,
                     ev,
-                  ); }
-                }
+                  )
+                }}
                 onMouseLeave={tip.hide}
               />
             </g>
@@ -349,7 +357,7 @@ export function StackedArea(props: {
   const [hi, setHi] = useState<number | null>(null)
   const n = xs.length
   if (!n) return <div ref={ref} />
-  const tops = new Array<number>(n).fill(0)
+  const tops = Array.from({ length: n }, () => 0)
   const layers = series.map((s) =>
     s.values.map((v, i) => {
       const b = tops[i]
@@ -460,15 +468,15 @@ export function BarList({ items, fmt = fmtNum }: { items: BarItem[]; fmt?: Fmt }
         <div
           key={d.label}
           className={`bar-row${d.onClick ? " clickable" : ""}`}
-          onMouseMove={(ev) =>{ 
+          onMouseMove={(ev) => {
             tip.show(
               <>
                 <TipHead>{d.label}</TipHead>
                 {d.tip ?? fmt(d.value)}
               </>,
               ev,
-            ); }
-          }
+            )
+          }}
           onMouseLeave={tip.hide}
           onClick={d.onClick}
         >
@@ -572,7 +580,7 @@ export function Treemap({
             key={d.label}
             style={{ cursor: d.onClick ? "pointer" : undefined }}
             onClick={d.onClick}
-            onMouseMove={(ev) =>{ 
+            onMouseMove={(ev) => {
               tip.show(
                 <>
                   <TipHead>{d.label}</TipHead>
@@ -580,8 +588,8 @@ export function Treemap({
                   {d.tip}
                 </>,
                 ev,
-              ); }
-            }
+              )
+            }}
             onMouseLeave={tip.hide}
           >
             <rect

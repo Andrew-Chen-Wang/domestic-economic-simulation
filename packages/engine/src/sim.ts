@@ -449,7 +449,7 @@ export class Sim {
     const w = this.w
     const cat = this.cat
     const pol = w.policy
-    for (const f of [...w.firms.values()]) {
+    for (const f of Array.from(w.firms.values())) {
       const p = cat.procs[f.proc]
       const g = cat.goods[f.good]
       const fs = ctx.firm(f.id)
@@ -528,7 +528,9 @@ export class Sim {
         if (excess > 0 && (f.util_ema < 0.75 || f.distress >= 2 || need === 0)) {
           const staff = [...f.staff.keys()]
             .filter((pid) => w.persons.get(pid)?.occ === o)
-            .sort((a, b) => (w.persons.get(a)?.skill[o] ?? 0) - (w.persons.get(b)?.skill[o] ?? 0))
+            .toSorted(
+              (a, b) => (w.persons.get(a)?.skill[o] ?? 0) - (w.persons.get(b)?.skill[o] ?? 0),
+            )
           for (const pid of staff) {
             if (excess <= 0) break
             const p = w.persons.get(pid) as Person
@@ -1157,7 +1159,7 @@ export class Sim {
         const port = physical.nearestPort(w, f.region)
         const tc = physical.transportCost(w, cat, gid, f.region, port)
         const sea = ((physical.SEA_FREIGHT_PER_T * g.kg) / 1000) * w.fx
-        return [s, ((wp) * w.fx * f.quality) / Math.max(f.price + tc + sea, 1e-12), tc]
+        return [s, (wp * w.fx * f.quality) / Math.max(f.price + tc + sea, 1e-12), tc]
       })
       let worldMkt = WORLD_SCALE * (w.stats.export_mult ?? 1) * Math.max(absorb[gid], 0)
       if (frontierPremium) worldMkt *= 0.3
@@ -1279,7 +1281,7 @@ export class Sim {
     const pol = w.policy
     const ctax = pol.carbon_tax
     const cpi = w.price_index
-    for (const f of [...w.firms.values()]) {
+    for (const f of Array.from(w.firms.values())) {
       const fs = ctx.firm(f.id)
       const p = cat.procs[f.proc]
       const g = cat.goods[f.good]
@@ -1659,7 +1661,7 @@ export class Sim {
     const cat = this.cat
     const rng = w.rng
     const dead: Firm[] = []
-    for (const f of [...w.firms.values()]) {
+    for (const f of Array.from(w.firms.values())) {
       const fs = ctx.firm(f.id)
       const g = cat.goods[f.good]
       const p = cat.procs[f.proc]

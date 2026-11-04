@@ -77,7 +77,9 @@ export function TimeChart({
       yfmt={yfmt}
       zero={zero}
       area={area}
-      onClick={(x) =>{  d.setCursor(x); }}
+      onClick={(x) => {
+        d.setCursor(x)
+      }}
     />
   )
 }
@@ -130,7 +132,9 @@ export function Th<K extends string>({
   return (
     <th
       className={num ? "num" : undefined}
-      onClick={() =>{  setSort(k); }}
+      onClick={() => {
+        setSort(k)
+      }}
       style={{ cursor: "pointer" }}
     >
       {label}

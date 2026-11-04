@@ -34,7 +34,5 @@ jobs:
         run: pnpm run build
       - name: Lint
         run: pnpm run lint
-      - name: Test (JS)
+      - name: Test (engine, API)
         run: pnpm run test
-      - name: Test (simulation engine)
-        run: python -m unittest discover -s apps/engine/tests -v

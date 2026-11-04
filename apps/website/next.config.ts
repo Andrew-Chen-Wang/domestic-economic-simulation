@@ -3,7 +3,7 @@ import type { NextConfig } from "next"
 
 const nextConfig: NextConfig = {
   reactCompiler: true,
-  transpilePackages: ["@api/internal"],
+  transpilePackages: ["@api/internal", "@econsim/engine"],
   turbopack: {
     root: path.join(__dirname, "..", ".."),
   },

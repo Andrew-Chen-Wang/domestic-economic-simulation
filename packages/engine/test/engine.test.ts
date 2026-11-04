@@ -28,17 +28,17 @@ describe("catalog", () => {
     expect(CAT.goods.smartphone.year).toBeGreaterThanOrEqual(2007)
     expect(CAT.goods.bread_bakery.year).toBeLessThan(0)
     // a product can never predate the knowledge it requires
-    for (const p of Object.values(CAT.procs))
-      for (const k of p.know) expect(p.year, p.id).toBeGreaterThanOrEqual(CAT.kyear[k])
+    const early = Object.values(CAT.procs).filter((p) => p.know.some((k) => p.year < CAT.kyear[k]))
+    expect(early.map((p) => p.id)).toEqual([])
   })
 
   it("has frontier processes that cover their costs", () => {
-    for (const g of Object.values(CAT.goods)) {
-      if (g.endowment || !g.processes.length) continue
+    const losing = Object.values(CAT.goods).filter((g) => {
+      if (g.endowment || !g.processes.length) return false
       const p = CAT.procs[g.processes[0]]
-      if (p.trad) continue
-      expect(p.unit_cost_ref, g.id).toBeLessThanOrEqual(g.price * 1.001 + 1e-9)
-    }
+      return !p.trad && p.unit_cost_ref > g.price * 1.001 + 1e-9
+    })
+    expect(losing.map((g) => g.id)).toEqual([])
   })
 })
 
@@ -54,11 +54,13 @@ describe("physical", () => {
   it("cannot make semiconductors in 1850", () => {
     const w = generate("agrarian_1850", 1)
     const sim = new Sim(w)
-    for (const gid of ["chip_legacy", "smartphone", "jet_engine"]) {
-      const ok = CAT.goods[gid].processes.some((p) => sim.processFeasible(CAT.procs[p])[0])
-      expect(ok, gid).toBe(false)
-      expect(CAT.worldPrice(gid, w.start_year), gid).toBeNull()
-    }
+    const gids = ["chip_legacy", "smartphone", "jet_engine"]
+    const makeable = gids.filter((gid) =>
+      CAT.goods[gid].processes.some((p) => sim.processFeasible(CAT.procs[p])[0]),
+    )
+    const buyable = gids.filter((gid) => CAT.worldPrice(gid, w.start_year) !== null)
+    expect(makeable).toEqual([])
+    expect(buyable).toEqual([])
   })
 })
 
