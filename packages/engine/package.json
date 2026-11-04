@@ -1,0 +1,18 @@
+{
+  "name": "@econsim/engine",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Agent-based domestic economy simulation (catalog, world, monthly step, SQLite store)",
+  "license": "ISC",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./*": "./src/*.ts"
+  },
+  "scripts": {
+    "test": "vitest --run"
+  },
+  "devDependencies": {
+    "@types/node": "catalog:"
+  }
+}

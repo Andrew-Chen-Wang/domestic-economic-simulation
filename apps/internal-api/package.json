@@ -2,7 +2,7 @@
   "name": "@api/internal",
   "version": "1.0.0",
   "private": true,
-  "description": "",
+  "description": "HTTP API for the simulation engine (mounted at /api by the website)",
   "keywords": [],
   "license": "ISC",
   "author": "",
@@ -19,6 +19,7 @@
     "generate-specs": "tsx src/index.ts --openapi > openapi.json"
   },
   "dependencies": {
+    "@econsim/engine": "workspace:*",
     "@hono/node-server": "^2.0.3",
     "@scalar/hono-api-reference": "^0.10.16",
     "hono": "^4.12.21",
