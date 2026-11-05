@@ -36,6 +36,15 @@ Open http://localhost:3000, press **New simulation**, pick a scenario, then **+1
 | `apps/website`                | Next.js 16 dashboard as typed React components (overview, policy & rewind, timelines, money flows, products, industry, labor, knowledge, regions, ledger, events, catalog)                   |
 | `lib/typescript/utils`        | Shared TS utilities from the template                                                                                                                                                        |
 
+## Catalog expansion
+
+The dashboard now separates the **real-world reference catalog** from **simulation-ready**
+coverage. The reference catalog adds 19,650 detailed goods classifications, 12,740 historical
+occupations, 27,969 biomedical knowledge subjects and 3,141 medical procedures, with searchable
+source codes and definitions. It is served in bounded pages rather than sent to every dashboard.
+These records are not yet calibrated economic agents or production/research dependencies.
+See [source provenance, rebuilding and remaining model integration](packages/engine/src/catalog/reference/README.md).
+
 ## The model
 
 **Physical engine.** Every product is a structured engineering object: inputs (with substitutes),

@@ -1,0 +1,227 @@
+{
+  "schema": 1,
+  "editions": {
+    "goods": "USITC HTS 2026 Basic Edition",
+    "occupations": "US DOL DOT, fourth edition revised 1991 (historical)",
+    "knowledge": "NLM MeSH 2026 descriptors",
+    "processes": "NLM MeSH 2026 E-tree descriptors (medical techniques and procedures)"
+  },
+  "counts": {
+    "goods": 19650,
+    "occupations": 12740,
+    "knowledge": 27969,
+    "processes": 3141
+  },
+  "sources": [
+    {
+      "file": "hts.json",
+      "url": "https://www.usitc.gov/sites/default/files/tata/hts/hts_2026_basic_edition_json.json",
+      "sha256": "a718007c8455c93a88ddc68f15f036cee10e9a820065a4c356da1481f4131858"
+    },
+    {
+      "file": "dot-index.html",
+      "url": "https://www.dol.gov/agencies/oalj/topics/libraries/LIBDOT",
+      "sha256": "5f8ab3d8f9ed1b6141034125a08009bc49fdbd2c86f3f4b02dff18a4093d8a4d"
+    },
+    {
+      "file": "DOT01A.html",
+      "url": "https://www.dol.gov/agencies/oalj/PUBLIC/DOT/REFERENCES/DOT01A",
+      "sha256": "e66db20381cbc2aa9caf42ed47e48c85ab196b95acc9575852e4e67c3fe191e7"
+    },
+    {
+      "file": "DOT01B.html",
+      "url": "https://www.dol.gov/agencies/oalj/PUBLIC/DOT/REFERENCES/DOT01B",
+      "sha256": "320618898f82e65c3663f881d3f85f2303aa146bee404a52d446849f6364f602"
+    },
+    {
+      "file": "DOT01C.html",
+      "url": "https://www.dol.gov/agencies/oalj/PUBLIC/DOT/REFERENCES/DOT01C",
+      "sha256": "aa1420bc22f970d2a9257757b374d3a956b7f454c748f312e4ff27d9022b391c"
+    },
+    {
+      "file": "DOT01D.html",
+      "url": "https://www.dol.gov/agencies/oalj/PUBLIC/DOT/REFERENCES/DOT01D",
+      "sha256": "27dbeab15e78fa90ce8b0985d0f998b57d04805d95740725c15ce17e13933c6d"
+    },
+    {
+      "file": "DOT01E.html",
+      "url": "https://www.dol.gov/agencies/oalj/PUBLIC/DOT/REFERENCES/DOT01E",
+      "sha256": "e1cc1d810b46b45d7e46a26d56f2f2bae8417fc208df53f778d22be262879054"
+    },
+    {
+      "file": "DOT01F.html",
+      "url": "https://www.dol.gov/agencies/oalj/PUBLIC/DOT/REFERENCES/DOT01F",
+      "sha256": "3d6a407a338d39d7317056a714da849c31ccf38b0945082d3f1e71bdb3839ecf"
+    },
+    {
+      "file": "DOT02A.html",
+      "url": "https://www.dol.gov/agencies/oalj/PUBLIC/DOT/REFERENCES/DOT02A",
+      "sha256": "66d6df4982e5445cd4fc6da13f167f1962429d2a98d487c10efcc0fc70f5aad2"
+    },
+    {
+      "file": "DOT02B.html",
+      "url": "https://www.dol.gov/agencies/oalj/PUBLIC/DOT/REFERENCES/DOT02B",
+      "sha256": "438ab7f28fdc4471ede760528e0348e6dc11d72a34cb57311239af5b2c3fb8ea"
+    },
+    {
+      "file": "DOT02C.html",
+      "url": "https://www.dol.gov/agencies/oalj/PUBLIC/DOT/REFERENCES/DOT02C",
+      "sha256": "d049de64443817e53f18640ee4b4dd99d779a7331ec09c7d6aba2437d15eae9b"
+    },
+    {
+      "file": "DOT02D.html",
+      "url": "https://www.dol.gov/agencies/oalj/PUBLIC/DOT/REFERENCES/DOT02D",
+      "sha256": "e80b55a0192cdebe2c1a4f82a8506b94b7b6e8c2294437e5f01960c7a95df30b"
+    },
+    {
+      "file": "DOT03A.html",
+      "url": "https://www.dol.gov/agencies/oalj/PUBLIC/DOT/REFERENCES/DOT03A",
+      "sha256": "4388f3e46007bda8d41b61353bce9f5a3b2694199635e40069fcf7655e45863e"
+    },
+    {
+      "file": "DOT03B.html",
+      "url": "https://www.dol.gov/agencies/oalj/PUBLIC/DOT/REFERENCES/DOT03B",
+      "sha256": "b0b0f72cad5e7e01e6cdc3c8a910a94b4a0fc67d780934800d654198dbf1ee7f"
+    },
+    {
+      "file": "DOT04A.html",
+      "url": "https://www.dol.gov/agencies/oalj/PUBLIC/DOT/REFERENCES/DOT04A",
+      "sha256": "173506c9f7e0b6030fa3be6d82dbf6453af21fe1a235d3521d87077d9f10b446"
+    },
+    {
+      "file": "DOT05A.html",
+      "url": "https://www.dol.gov/agencies/oalj/PUBLIC/DOT/REFERENCES/DOT05A",
+      "sha256": "24bc8c35b10f5da9c1179527deb6db3efffcfee67cc8fc2fabcfecebddc01b8c"
+    },
+    {
+      "file": "DOT05B.html",
+      "url": "https://www.dol.gov/agencies/oalj/PUBLIC/DOT/REFERENCES/DOT05B",
+      "sha256": "b017fcc16b4cf95f972bdbc562ba008ed96b4cf8d4fcdac0e672766c468458e6"
+    },
+    {
+      "file": "DOT05C.html",
+      "url": "https://www.dol.gov/agencies/oalj/PUBLIC/DOT/REFERENCES/DOT05C",
+      "sha256": "07abf5a7c74d713ebe6d892162e59df94c933e5e898839b584ce0fb4947b283f"
+    },
+    {
+      "file": "DOT05D.html",
+      "url": "https://www.dol.gov/agencies/oalj/PUBLIC/DOT/REFERENCES/DOT05D",
+      "sha256": "a988823f0a02d841a99c91e8b6dd4dff592be0866aaf55b4b7e70f7ed2ae97b4"
+    },
+    {
+      "file": "DOT05E.html",
+      "url": "https://www.dol.gov/agencies/oalj/PUBLIC/DOT/REFERENCES/DOT05E",
+      "sha256": "89fbdf78e73afe7edbf4eac83a5b653dbb81ec3ef750769b288265ae5067e7f2"
+    },
+    {
+      "file": "DOT05F.html",
+      "url": "https://www.dol.gov/agencies/oalj/PUBLIC/DOT/REFERENCES/DOT05F",
+      "sha256": "eb9f22cc00da8ac9d3a4566982abc59a0463cb2d8b92bac507460758a4747e44"
+    },
+    {
+      "file": "DOT05G.html",
+      "url": "https://www.dol.gov/agencies/oalj/PUBLIC/DOT/REFERENCES/DOT05G",
+      "sha256": "5e1e84c38121862420dbe001d089f2bf724276b0f108d64fcdd8f5ca249eb7eb"
+    },
+    {
+      "file": "DOT05H.html",
+      "url": "https://www.dol.gov/agencies/oalj/PUBLIC/DOT/REFERENCES/DOT05H",
+      "sha256": "017a6cfa167d503202c4d7378d5ce4de137a39209d139c2de6cd5d2dccc0f234"
+    },
+    {
+      "file": "DOT06A.html",
+      "url": "https://www.dol.gov/agencies/oalj/PUBLIC/DOT/REFERENCES/DOT06A",
+      "sha256": "017f76743965385bc1223f806f4c101e5c9055589d37b8f895742d4b987f379c"
+    },
+    {
+      "file": "DOT06B.html",
+      "url": "https://www.dol.gov/agencies/oalj/PUBLIC/DOT/REFERENCES/DOT06B",
+      "sha256": "9a5fceb996c8180397fa14677c6818d22c37d667fb58ff2b49aaa39ac7939e2b"
+    },
+    {
+      "file": "DOT06C.html",
+      "url": "https://www.dol.gov/agencies/oalj/PUBLIC/DOT/REFERENCES/DOT06C",
+      "sha256": "cde53407136f41cb7eeb15b2b8fffc4e0fcbdb2bdd713efc2df995c3e5975ce5"
+    },
+    {
+      "file": "DOT06D.html",
+      "url": "https://www.dol.gov/agencies/oalj/PUBLIC/DOT/REFERENCES/DOT06D",
+      "sha256": "4dd7b1f214e56cbc675735bc27ccbc7cf2342be81fbe9876cf0b3879eefab414"
+    },
+    {
+      "file": "DOT06E.html",
+      "url": "https://www.dol.gov/agencies/oalj/PUBLIC/DOT/REFERENCES/DOT06E",
+      "sha256": "d5cd24588aa64a26f885f80ef4950668efb9ada6515dcfc40cd8124fb6a182a2"
+    },
+    {
+      "file": "DOT06F.html",
+      "url": "https://www.dol.gov/agencies/oalj/PUBLIC/DOT/REFERENCES/DOT06F",
+      "sha256": "c9cf652e3b4a41cada507f0618ce31329754fc95e16bfa3c898eb61b8ad40f2e"
+    },
+    {
+      "file": "DOT07A.html",
+      "url": "https://www.dol.gov/agencies/oalj/PUBLIC/DOT/REFERENCES/DOT07A",
+      "sha256": "dd9934122fc43636baba5ebe657c600fb33c03d642f06e33f7eb28118d706e55"
+    },
+    {
+      "file": "DOT07B.html",
+      "url": "https://www.dol.gov/agencies/oalj/PUBLIC/DOT/REFERENCES/DOT07B",
+      "sha256": "b034529a9c23d6d5a0dc59b3f10aea974e591bbbedca373586e22da3d7dd62df"
+    },
+    {
+      "file": "DOT07C.html",
+      "url": "https://www.dol.gov/agencies/oalj/PUBLIC/DOT/REFERENCES/DOT07C",
+      "sha256": "05488d7ebfd5cd09ec965f8ea6167fd744d9c052984df688348c35416ca07187"
+    },
+    {
+      "file": "DOT07D.html",
+      "url": "https://www.dol.gov/agencies/oalj/PUBLIC/DOT/REFERENCES/DOT07D",
+      "sha256": "a876fb002e9b93ea30f0dc43437c655726002d4984e6f33e41863a85301b4c61"
+    },
+    {
+      "file": "DOT07E.html",
+      "url": "https://www.dol.gov/agencies/oalj/PUBLIC/DOT/REFERENCES/DOT07E",
+      "sha256": "2f2da49f5a6ac017e89f7a2c2c99fbc4051c245eb65b56ae15e1086f1cc2701c"
+    },
+    {
+      "file": "DOT07F.html",
+      "url": "https://www.dol.gov/agencies/oalj/PUBLIC/DOT/REFERENCES/DOT07F",
+      "sha256": "057c39aebf3cef72d1196c00abf49fc8054bc971896dfa65ac9b5332ab9ee65a"
+    },
+    {
+      "file": "DOT08A.html",
+      "url": "https://www.dol.gov/agencies/oalj/PUBLIC/DOT/REFERENCES/DOT08A",
+      "sha256": "820f316eab45a0e3106df805cfe73dfdc976cf87252e5da0a3611eff057e9782"
+    },
+    {
+      "file": "DOT08B.html",
+      "url": "https://www.dol.gov/agencies/oalj/PUBLIC/DOT/REFERENCES/DOT08B",
+      "sha256": "24273f1647cbec546119627d665235d945c6387f5313431c9ccbbc37c0c921c5"
+    },
+    {
+      "file": "DOT08C.html",
+      "url": "https://www.dol.gov/agencies/oalj/PUBLIC/DOT/REFERENCES/DOT08C",
+      "sha256": "e17adc746e9bbffbcd3643812bfb85abc22a6130fa10f85d8220ee768df81482"
+    },
+    {
+      "file": "DOT09A.html",
+      "url": "https://www.dol.gov/agencies/oalj/PUBLIC/DOT/REFERENCES/DOT09A",
+      "sha256": "326ae01e65a76b34e117aef20834f07fca617ef3a678a12e1b96e5499de0b1d6"
+    },
+    {
+      "file": "DOT09B.html",
+      "url": "https://www.dol.gov/agencies/oalj/PUBLIC/DOT/REFERENCES/DOT09B",
+      "sha256": "51b1bee6c6eac8d115e0cad85bb78089483bf94ef929d79c06b8da7cef4d9ddd"
+    },
+    {
+      "file": "DOT09C.html",
+      "url": "https://www.dol.gov/agencies/oalj/PUBLIC/DOT/REFERENCES/DOT09C",
+      "sha256": "f78d6009386aa751406aa59ed4dbfcd070b50110664d383fa820cd26e69623fa"
+    },
+    {
+      "file": "mesh.xml",
+      "url": "https://nlmpubs.nlm.nih.gov/projects/mesh/MESH_FILES/xmlmesh/desc2026.xml",
+      "sha256": "449792ed59ba4d60035e44724352f7361ec0dc945b67dcd821a50ff32f81bcdb"
+    }
+  ]
+}

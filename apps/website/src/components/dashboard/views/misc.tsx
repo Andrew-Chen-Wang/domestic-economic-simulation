@@ -1,6 +1,8 @@
 "use client"
 
 import { useState } from "react"
+import { Button } from "@website/components/ui/button"
+import { ReferenceCatalogView } from "./reference-catalog"
 import { type EventsResponse, type LedgerResponse, useApi } from "../api"
 import { Card, ErrorCard, Loading } from "../common"
 import { fmtMoney, fmtNum, fmtYearBC } from "../format"
@@ -293,6 +295,36 @@ export function EventsView() {
 
 // ------------------------------------------------------------------ CATALOG
 export function CatalogView() {
+  const [mode, setMode] = useState<"reference" | "modeled">("reference")
+  return (
+    <>
+      <h1>Catalog of everything</h1>
+      <nav className="toolbar" aria-label="Catalog coverage">
+        <Button
+          variant={mode === "reference" ? "secondary" : "ghost"}
+          aria-pressed={mode === "reference"}
+          onClick={() => {
+            setMode("reference")
+          }}
+        >
+          Real-world reference
+        </Button>
+        <Button
+          variant={mode === "modeled" ? "secondary" : "ghost"}
+          aria-pressed={mode === "modeled"}
+          onClick={() => {
+            setMode("modeled")
+          }}
+        >
+          Simulation-ready
+        </Button>
+      </nav>
+      {mode === "reference" ? <ReferenceCatalogView /> : <ModeledCatalogView />}
+    </>
+  )
+}
+
+function ModeledCatalogView() {
   const d = useDash()
   const [q, setQ] = useState("")
   const [cat, setCat] = useState("")
@@ -305,7 +337,6 @@ export function CatalogView() {
     .toSorted((a, b) => a.year - b.year)
   return (
     <>
-      <h1>Catalog of everything</h1>
       <p className="lead">
         {sm.goods} goods and services, {sm.processes} production processes, {sm.knowledge} knowledge
         nodes and {sm.occupations} occupations. Each product is a structured engineering object:

@@ -52,6 +52,16 @@ const app = new Hono()
   // ---------------------------------------------------------------- catalog
   .get("/meta", (c) => c.json(api.meta(getEngine())))
   .get("/catalog", (c) => c.json(api.catalog()))
+  .get("/catalog/reference", async (c) =>
+    c.json(
+      await api.catalogReference({
+        kind: str(c, "kind"),
+        q: str(c, "q"),
+        offset: Number(c.req.query("offset") ?? 0),
+        limit: Number(c.req.query("limit") ?? 50),
+      }),
+    ),
+  )
   .get("/catalog/good/:gid", (c) => c.json(api.catalogGood(c.req.param("gid"))))
   // -------------------------------------------------------------- timelines
   .get("/timelines", (c) => c.json(api.timelines(getEngine())))

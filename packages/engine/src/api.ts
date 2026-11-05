@@ -5,6 +5,7 @@
 import { existsSync } from "node:fs"
 import { dirname, join, resolve } from "node:path"
 import { getCatalog, type Good } from "./catalog"
+import { referenceManifest, searchReference } from "./catalog/reference"
 import { Engine, type Job } from "./engine"
 import * as physical from "./physical"
 import { defaultPolicy, type PolicyPatch, SCHEMA } from "./policy"
@@ -100,9 +101,27 @@ export function goodBrief(g: Good) {
 }
 export type GoodBrief = ReturnType<typeof goodBrief>
 
+/** Reference records have identity and provenance but no calibrated economic behavior yet. */
+export async function catalogReference(options: Parameters<typeof searchReference>[0] = {}) {
+  try {
+    return await searchReference(options)
+  } catch (error) {
+    if (
+      error instanceof Error &&
+      (error.message.startsWith("unknown reference") ||
+        error.message.startsWith("offset must") ||
+        error.message.startsWith("reference search"))
+    )
+      throw new ApiError(error.message)
+    throw error
+  }
+}
+export type CatalogReferenceResponse = Awaited<ReturnType<typeof catalogReference>>
+
 export function catalog() {
   const cat = CAT()
   return {
+    reference: { counts: referenceManifest.counts, editions: referenceManifest.editions },
     goods: Object.values(cat.goods)
       .filter((g) => !g.endowment)
       .map(goodBrief),
