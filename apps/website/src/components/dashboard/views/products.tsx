@@ -295,7 +295,15 @@ export function ProductView() {
                   <td>{f.name}</td>
                   <td>{f.region}</td>
                   <td className="num">{fmtNum(f.output)}</td>
-                  <td className="num">{fmtPct(f.design, 0)}</td>
+                  <td className="num">
+                    {fmtPct(f.design, 0)}
+                    {f.corporate_maturity !== null && (
+                      <small>
+                        <br />
+                        Organization: {fmtPct(f.corporate_maturity, 0)}
+                      </small>
+                    )}
+                  </td>
                   <td className="num">{f.gen}</td>
                   <td className="num">{f.quality.toFixed(2)}</td>
                   <td>{f.blocked ?? ""}</td>

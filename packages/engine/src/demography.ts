@@ -24,11 +24,25 @@ export function annualMortality(ageY: number, health: number): number {
   return Math.min(0.6, base * mult)
 }
 
+/** Schooling among women in the modeled childbearing cohort; general education for legacy worlds. */
+export function fertilityEducation(w: World): number {
+  if (w.mechanism_version !== 2) return w.stats.avg_school_years ?? 9
+  let total = 0
+  let count = 0
+  for (const person of w.persons.values()) {
+    if (person.sex === "female" && person.age >= 240 && person.age < 540) {
+      total += person.school_years
+      count++
+    }
+  }
+  return count ? total / count : (w.stats.avg_school_years ?? 9)
+}
+
 export function fertility(w: World): number {
   const st = w.stats
   const inc = st.cons_pc_real ?? 600
   const urban = st.urbanization ?? 0.5
-  const edu = st.avg_school_years ?? 9
+  const edu = fertilityEducation(w)
   let tfr = 1.35 + 5 * Math.exp(-inc / 700) * (1 - 0.35 * urban) * Math.max(0.3, 1 - 0.045 * edu)
   tfr += (0.25 * (w.policy.child_benefit ?? 0)) / 0.05
   return Math.max(0.9, Math.min(7.5, tfr))
@@ -41,7 +55,7 @@ export function step(sim: Sim, ctx: Ctx) {
   const health = w.stats.health_access ?? 0.5
   const tfr = fertility(w)
   w.stats.tfr = tfr
-  const birthP = tfr / (25 * 12) / 2 // per adult agent aged 20-44 per month
+  const birthP = tfr / (25 * 12) / (w.mechanism_version === 2 ? 1 : 2) // per woman, or legacy half-weighted adult
   let births = 0
   let deaths = 0
   const dead: Person[] = []
@@ -52,7 +66,13 @@ export function step(sim: Sim, ctx: Ctx) {
       dead.push(p)
       continue
     }
-    if (p.age >= 240 && p.age < 540 && random(rng) < birthP) newborn.push(p)
+    if (
+      p.age >= 240 &&
+      p.age < 540 &&
+      (w.mechanism_version !== 2 || p.sex === "female") &&
+      random(rng) < birthP
+    )
+      newborn.push(p)
     if (p.age === retAge && p.jobs.size) sim.quitAllJobs(p)
   }
   for (const p of dead) {

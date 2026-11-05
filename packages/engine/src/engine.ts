@@ -65,6 +65,8 @@ export function createWorldSync(
 /** The burn-in is pre-history: reset the clock, keep the settled state. */
 function settle(w: World, burnIn: number) {
   w.tick = 0
+  for (const f of w.firms.values())
+    for (const state of Object.values(f.capabilities ?? {})) state.last_tick = -1
   w.price_index = 1
   const st = w.stats
   st.cpi_hist = [1]

@@ -9,6 +9,7 @@
  */
 import { type Catalog, eligible, engelShares, getCatalog } from "./catalog"
 import * as physical from "./physical"
+import { seedCorporateExperience } from "./technology"
 import { defaultPolicy, type Policy } from "./policy"
 import { choice, gauss, pick, random, type RngState, seedRng, shuffle, uniform } from "./rng"
 
@@ -18,6 +19,8 @@ export const WORLD_SCALE = 30
 
 export interface Person {
   id: number
+  /** Explicit reproductive cohort in version-2 worlds; absent in legacy snapshots. */
+  sex?: "female" | "male"
   /** months */
   age: number
   region: number
@@ -82,6 +85,11 @@ export interface Firm {
   demand_ema: number
   export_ema: number
   design: number
+  /** Process-specific organizational memory. Workers carry skills, not these records. */
+  capabilities?: Record<
+    string,
+    { cycles: number; progress: number; last_tick: number; upgrade_cycle: number }
+  >
   cum_output: number
   gen: number
   quality: number
@@ -257,6 +265,8 @@ export interface Scenario {
 }
 
 export interface World {
+  /** Missing means legacy dynamics; new snapshots retain their chosen mechanism. */
+  mechanism_version?: 2
   tick: number
   start_year: number
   scale: number
@@ -293,6 +303,7 @@ export const monthOf = (w: World) => w.tick % 12
 
 export function newWorld(): World {
   return {
+    mechanism_version: 2,
     tick: 0,
     start_year: 2025,
     scale: 500,
@@ -345,6 +356,7 @@ export function newPerson(w: World, ageM: number, region: number): Person {
     debt: 0,
     inactive: false,
   }
+  if (w.mechanism_version === 2) p.sex = random(w.rng) < 0.5 ? "female" : "male"
   w.persons.set(p.id, p)
   return p
 }
@@ -1141,6 +1153,7 @@ function seedFirm(
   f.plan = qtyMonth
   f.design = 1
   f.cum_output = qtyMonth * 12 * 25 // decades of industry experience
+  seedCorporateExperience(w, cat, f)
   f.gen = Math.max(0, physical.worldGeneration(w, cat, gid) - (w.scenario.gen_lag ?? 1))
   return f
 }

@@ -14,6 +14,12 @@
  */
 import type { Catalog, Process } from "./catalog"
 import * as physical from "./physical"
+import {
+  advanceCorporateExperience,
+  corporateMaturity,
+  processTechnology,
+  publicKnowledgeBoost,
+} from "./technology"
 import { gauss, random } from "./rng"
 import { type Ctx, pct0, type Sim } from "./sim"
 import { addEvent, type Firm, personFte, type World, yearOf } from "./world"
@@ -231,12 +237,9 @@ export function firmRd(sim: Sim, ctx: Ctx, f: Firm) {
   const rng = w.rng
   const p = cat.procs[f.proc]
   const g = cat.goods[f.good]
-  // embodied technical change: replacing machines and buying licences slowly brings an
-  // established producer's design up toward the world frontier
-  if (f.design >= 1 && f.gen < physical.worldGeneration(w, cat, f.good) - 1 && random(rng) < 1 / 30)
-    f.gen += 1
-  if (f.rd_share <= 0) return
-  let eff = researchEffort(w, f, RD_OCCS) * f.rd_share
+  const profile = processTechnology(cat, p)
+  const version2 = w.mechanism_version === 2
+  let eff = researchEffort(w, f, RD_OCCS) * Math.max(0, f.rd_share)
   if (f.design >= 1) {
     // only the engineers actually assigned to R&D count
     let tech = 0
@@ -247,6 +250,29 @@ export function firmRd(sim: Sim, ctx: Ctx, f: Firm) {
     const rdFte = ctx.fs.get(f.id)?.rd_fte ?? 0
     eff *= tech > 0 ? Math.min(1, rdFte / tech) : 0
   }
+  const corporate = version2
+    ? advanceCorporateExperience(
+        w,
+        cat,
+        f,
+        eff,
+        ctx.fs.get(f.id)?.net ?? 0,
+        p.know.every((k) => (w.knowledge[k] ?? 0) >= 0.5) &&
+          prototypeBlocker(w, cat, f, p) === null,
+      )
+    : null
+  const validatedUpgrade = !corporate || corporate.cycles - corporate.upgrade_cycle >= 1 - 1e-9
+  // Buying a machine is useful, but a difficult process still needs this firm's validation.
+  if (
+    f.design >= 1 &&
+    f.gen < physical.worldGeneration(w, cat, f.good) - 1 &&
+    validatedUpgrade &&
+    random(rng) < 1 / 30
+  ) {
+    f.gen += 1
+    if (corporate) corporate.upgrade_cycle = corporate.cycles
+  }
+  if (f.rd_share <= 0) return
   if (eff <= 0) {
     if (f.design < 1) f.blocked = "no engineers available for R&D"
     return
@@ -276,12 +302,14 @@ export function firmRd(sim: Sim, ctx: Ctx, f: Firm) {
     // reverse engineering imports
     if ((w.imports_12m[f.good] ?? 0) > 0) {
       const under = prereqMin(w.knowledge, p.know)
-      mult += 3 * (1 - g.opq) * under ** 2
+      mult = version2
+        ? publicKnowledgeBoost(profile, 1 - g.opq, under)
+        : mult + 3 * (1 - g.opq) * under ** 2
     }
     // other domestic producers' engineers carry tacit knowledge
     for (const o of w.firms.values()) {
       if (o.good === f.good && o.design >= 1 && o.id !== f.id) {
-        mult += 2
+        mult += version2 ? 0.5 * (1 - profile.tacit_share) : 2
         break
       }
     }
@@ -324,7 +352,15 @@ export function firmRd(sim: Sim, ctx: Ctx, f: Firm) {
           `design; progress ${pct0(f.design)} -> ${pct0(nw)}).`,
         { firm: f.id, good: f.good },
       )
+    if (version2) {
+      const cap = 1 - profile.tacit_share * (1 - corporateMaturity(f, cat, p))
+      if (nw > cap && cap < 1) {
+        nw = Math.max(f.design, cap)
+        f.blocked = `organizational validation: ${corporate?.cycles.toFixed(1) ?? 0}/${profile.mastery_cycles} cycles (${profile.cycle_months} months per cycle at full capacity)`
+      }
+    }
     if (nw >= 1) {
+      if (corporate) corporate.upgrade_cycle = corporate.cycles
       f.design = 1
       f.blocked = null
       f.gen = Math.max(0, physical.worldGeneration(w, cat, f.good) - 2)
@@ -338,12 +374,18 @@ export function firmRd(sim: Sim, ctx: Ctx, f: Firm) {
     } else f.design = nw
   } else {
     // ---- improvement R&D: needs a working product line
-    if (g.cat === "public" || f.cum_output <= f.plan * 12) return
+    if (
+      g.cat === "public" ||
+      f.cum_output <= f.plan * 12 ||
+      (corporate && corporate.cycles - corporate.upgrade_cycle < 1 - 1e-9)
+    )
+      return
     let ahead = f.gen - physical.worldGeneration(w, cat, f.good)
     // catching up to the frontier is far cheaper than pushing beyond it
     const need = ahead < 0 ? Math.max(D, 500) * 2 : Math.max(D, 2000) * 6 * 3 ** ahead
     if (random(rng) < Math.min(0.03, eff / need)) {
       f.gen += 1
+      if (corporate) corporate.upgrade_cycle = corporate.cycles
       ahead = f.gen - physical.worldGeneration(w, cat, f.good)
       if (ahead >= 1)
         addEvent(

@@ -8,6 +8,8 @@
  *   transfers -> firm finance, entry & exit -> R&D & knowledge -> infrastructure & housing ->
  *   exchange rate -> metrics
  */
+import { corporateMaturity, portableDesignProgress, processTechnology } from "./technology"
+import { fertilityEducation } from "./demography"
 import { type Catalog, engelShares, eligible, getCatalog, type Good, type Process } from "./catalog"
 import * as demography from "./demography"
 import * as knowledgeEngine from "./knowledge-engine"
@@ -651,7 +653,10 @@ export class Sim {
           hires += take
           // tacit know-how travels with experienced workers
           if (f.design < 1 && p.last_good === f.good)
-            f.design = Math.min(0.95, f.design + 0.08 * (p.skill[o] ?? 0.3))
+            f.design =
+              w.mechanism_version === 2
+                ? portableDesignProgress(cat, f, p.skill[o] ?? 0.3)
+                : Math.min(0.95, f.design + 0.08 * (p.skill[o] ?? 0.3))
           p.last_good = f.good
         }
         if (remaining <= 0.01) break
@@ -2025,6 +2030,14 @@ export class Sim {
       const old = f.proc
       f.proc = best[0]
       const p2 = cat.procs[best[0]]
+      if (
+        w.mechanism_version === 2 &&
+        processTechnology(cat, p2).tacit_share >= 0.65 &&
+        corporateMaturity(f, cat, p2) < 1
+      ) {
+        f.design = 1 - processTechnology(cat, p2).tacit_share * (1 - corporateMaturity(f, cat, p2))
+        f.cum_output = 0
+      }
       const target = Math.max(f.sales_ema, f.plan, 1e-9)
       const r = w.regions[f.region]
       // release land of the old process if it differs
@@ -2136,7 +2149,9 @@ export class Sim {
       // start with a pilot plant; expand once demand is proven
       let target = Math.max(gapQty * uniform(rng, 0.07, 0.15), 1e-9)
       const simple = p.design_effort < 400 && p.know.every((k) => (w.knowledge[k] ?? 0) >= 0.8)
-      let design = w.produced_ever.has(gid) || simple || p.trad ? 1 : 0
+      const organizationRequired =
+        w.mechanism_version === 2 && processTechnology(cat, p).tacit_share >= 0.65
+      let design = (!organizationRequired && (w.produced_ever.has(gid) || simple)) || p.trad ? 1 : 0
       let owner: Firm["owner"] = "private"
       if (
         design < 1 &&
@@ -2145,7 +2160,7 @@ export class Sim {
         (w.stats.wage_level_vs_world ?? 1) < 0.9
       ) {
         owner = "foreign"
-        design = 1
+        if (!organizationRequired) design = 1
       }
       if (state) owner = "state"
       // financing
@@ -2169,7 +2184,16 @@ export class Sim {
         pol.business_entry_cost +
         capex +
         target * cost * 2 +
-        (design < 1 ? 6 * (w.wage_index[this.rdOccFor(p, g)] ?? 3000) * S : 0)
+        (design < 1
+          ? (w.mechanism_version === 2
+              ? Math.max(
+                  6,
+                  processTechnology(cat, p).cycle_months * processTechnology(cat, p).mastery_cycles,
+                )
+              : 6) *
+            (w.wage_index[this.rdOccFor(p, g)] ?? 3000) *
+            S
+          : 0)
       const f = newFirm(w, firmName(rng, gid, cat), rid, gid, pid, owner)
       f.price = mkt * 0.97
       f.demand_ema = design >= 1 ? target : 0
@@ -2565,6 +2589,10 @@ export class Sim {
     return {
       year: Math.round(yearOf(w) * 1000) / 1000,
       population: pop,
+      mechanism_version: w.mechanism_version ?? 1,
+      agent_count: w.persons.size,
+      agent_scale: S,
+      female_school_years: w.mechanism_version === 2 ? fertilityEducation(w) : null,
       gdp,
       real_gdp: realGdp,
       gdp_pc: gdp / Math.max(pop, 1),
@@ -2646,6 +2674,11 @@ export class Sim {
 }
 
 export interface Metrics {
+  /** Absent in historical metrics from legacy timelines. */
+  mechanism_version?: number
+  agent_count?: number
+  agent_scale?: number
+  female_school_years?: number | null
   year: number
   population: number
   gdp: number

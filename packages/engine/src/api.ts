@@ -9,6 +9,7 @@ import { referenceManifest, searchReference } from "./catalog/reference"
 import { Engine, type Job } from "./engine"
 import * as physical from "./physical"
 import { defaultPolicy, type PolicyPatch, SCHEMA } from "./policy"
+import { rankTechnology } from "./technology"
 import { SECTOR_OF_CAT } from "./sim"
 import type { GoodsRow } from "./store"
 import { SCENARIOS, type World } from "./world"
@@ -125,7 +126,11 @@ export function catalog() {
     goods: Object.values(cat.goods)
       .filter((g) => !g.endowment)
       .map(goodBrief),
-    knowledge: Object.entries(cat.knowledge).map(([k, v]) => ({ ...v, year_eff: cat.kyear[k] })),
+    knowledge: Object.entries(cat.knowledge).map(([k, v]) => ({
+      ...v,
+      year_eff: cat.kyear[k],
+      technology: rankTechnology(v),
+    })),
     occupations: Object.values(cat.occupations),
   }
 }

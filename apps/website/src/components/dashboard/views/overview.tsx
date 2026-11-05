@@ -159,6 +159,20 @@ export function Overview() {
             />
           </Card>
           <Card title="Population and fertility">
+            <p>
+              {m?.agent_count !== undefined && m.agent_scale !== undefined
+                ? `${fmtNum(m.agent_count)} representative agents × ${fmtNum(m.agent_scale)} people per agent. `
+                : "Each agent represents a group of people. "}
+              Births and immigration add agents; deaths and emigration remove them.
+              Below-replacement fertility can coexist with population growth for decades because of
+              age structure and migration.
+            </p>
+            {m?.female_school_years !== null && m?.female_school_years !== undefined && (
+              <p>
+                Schooling among women aged 20–44: {m.female_school_years.toFixed(1)} years on
+                average.
+              </p>
+            )}
             <TimeChart
               defs={[{ name: "Population", key: "population" }]}
               yfmt={fmtNum}
@@ -171,6 +185,11 @@ export function Overview() {
                   name: "Fertility rate (births per woman)",
                   points: pts(d.series, "tfr"),
                   color: "var(--series-3)",
+                },
+                {
+                  name: "Approximate replacement (2.1)",
+                  points: pts(d.series, "tfr").map(([tick]) => [tick, 2.1]),
+                  color: "var(--muted)",
                 },
               ]}
               xfmt={ax.xfmt}

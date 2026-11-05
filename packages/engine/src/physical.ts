@@ -7,6 +7,7 @@
  *   product's tolerance, cleanroom availability, worker craft skill and the learning curve.
  * - Transport cost comes from mass x distance x infrastructure quality.
  */
+import { corporateMaturity, processTechnology } from "./technology"
 import type { Catalog, Input, Process } from "./catalog"
 import { HOURS, type Firm, type Region, type World, yearOf } from "./world"
 
@@ -205,11 +206,15 @@ export function knowHow(w: World, cat: Catalog, p: Process): number {
 export function firmTfp(w: World, cat: Catalog, f: Firm, p: Process): number {
   const r = w.regions[f.region]
   const kh = 0.35 + 0.65 * knowHow(w, cat, p)
+  const organization =
+    w.mechanism_version === 2
+      ? 1 - 0.65 * processTechnology(cat, p).tacit_share * (1 - corporateMaturity(f, cat, p))
+      : 1
   let infra = 0.55 + 0.25 * (r.infra.road ?? 0.5) + 0.2 * (r.infra.grid ?? 0.5)
   const g = cat.goods[f.good]
   if (g.svc && (g.cat === "service" || g.cat === "software"))
     infra *= 0.85 + 0.15 * (r.infra.broadband ?? 0.5)
-  return kh * infra * r.productivity * (w.stats.tfp_mult ?? 1)
+  return organization * kh * infra * r.productivity * (w.stats.tfp_mult ?? 1)
 }
 
 export function workerProductivity(skill: number): number {
@@ -344,6 +349,11 @@ export function precisionOf(cat: Catalog, f: Firm, eq: string | null): number | 
 /** Design improvements the world frontier has made since the good was introduced (~1 / 6 yrs). */
 export function worldGeneration(w: World, cat: Catalog, gid: string): number {
   const age = yearOf(w) - cat.goods[gid].year
+  if (w.mechanism_version === 2) {
+    const pid = cat.goods[gid].processes[0]
+    const pace = pid ? processTechnology(cat, cat.procs[pid]).frontier_years : null
+    if (pace) return Math.max(0, Math.trunc(age / pace))
+  }
   return Math.max(0, Math.min(8, Math.trunc(age / 6)))
 }
 
@@ -547,6 +557,8 @@ export function explain(w: World, cat: Catalog, gid: string) {
       name: f.name,
       region: w.regions[f.region].name,
       design: r3(f.design),
+      corporate_maturity:
+        w.mechanism_version === 2 ? r3(corporateMaturity(f, cat, cat.procs[f.proc])) : null,
       gen: f.gen,
       quality: r3(f.quality),
       output: f.last.output ?? 0,

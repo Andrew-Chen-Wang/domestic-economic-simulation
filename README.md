@@ -63,6 +63,13 @@ change, and go bankrupt. Households spend by need along Engel curves. The govern
 services (schools, hospitals, research, administration, infrastructure), pays benefits and borrows; a
 central bank follows a Taylor rule; the currency floats.
 
+**Organizational learning and demographics.** New simulations track firms' process-specific
+validation histories separately from workers' portable skills. Technology difficulty rankings show
+assumed cycle times and tacit knowledge barriers. Population cohorts grow and shrink through births,
+deaths and migration; fertility responds to income, urbanization and women's schooling and can fall
+below replacement. Existing snapshots retain their original rules. See
+[mechanisms, assumptions, sources and verification](docs/technology-and-demography.md).
+
 **Knowledge & invention engine.** Understanding, reproducing, manufacturing economically and improving
 are separate achievements. National science grows via public research, literature absorption (limited
 by how educated the workforce is), learning by doing, and decays when unpracticed. Firm R&D is uncertain:
